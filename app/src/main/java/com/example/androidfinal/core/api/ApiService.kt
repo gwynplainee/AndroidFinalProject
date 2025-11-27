@@ -1,4 +1,4 @@
-package com.example.androiddevsis4
+package com.example.androidfinal.core.api
 
 import retrofit2.http.GET
 import retrofit2.http.Query

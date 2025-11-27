@@ -1,15 +1,17 @@
-package com.example.androiddevsis4
+package com.example.androidfinal.core.api
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.apply
+import kotlin.jvm.java
 
 object ApiClient {
     private const val BASE_URL = "https://newsapi.org/"
 
     private val logger = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
+        HttpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
     }
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(logger)

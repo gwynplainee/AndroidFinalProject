@@ -1,4 +1,4 @@
-package com.example.androiddevsis4
+package com.example.androidfinal.core.data.model
 
 import com.google.gson.annotations.SerializedName
 
