@@ -1,4 +1,4 @@
-package com.example.androidfinal.core.api
+package com.example.androidfinal.core.data.api
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -11,7 +11,7 @@ object ApiClient {
     private const val BASE_URL = "https://newsapi.org/"
 
     private val logger = HttpLoggingInterceptor().apply {
-        HttpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        level = HttpLoggingInterceptor.Level.BODY
     }
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(logger)

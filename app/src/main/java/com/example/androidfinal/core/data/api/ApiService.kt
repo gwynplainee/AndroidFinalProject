@@ -1,5 +1,6 @@
-package com.example.androidfinal.core.api
+package com.example.androidfinal.core.data.api
 
+import com.example.androidfinal.core.data.model.NewsResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
