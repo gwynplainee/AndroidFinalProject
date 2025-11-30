@@ -44,7 +44,7 @@ class HomeFragment : Fragment() {
         // Initialize Adapter
         val categoryAdapter = CategoryAdapter(categoryList) { selectedCategory ->
 
-            viewModel.fetchNews(selectedCategory.lowercase())
+//            viewModel.fetchNews(selectedCategory.lowercase())
         }
 
         navRecyclerView.adapter = categoryAdapter

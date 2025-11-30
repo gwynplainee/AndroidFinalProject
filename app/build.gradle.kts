@@ -21,6 +21,10 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    buildFeatures{
+        buildConfig = true
+    }
+
     val properties = Properties()
     properties.load(project.rootProject.file("local.properties").inputStream())
 
@@ -36,7 +40,7 @@ android {
             buildConfigField(
                 "String",
                 "NEWS_API_KEY",
-                "\"${properties.getProperty("NEWS_API_KEY")}\"" // Note the escaped quotes
+                "\"${properties.getProperty("NEWS_API_KEY")}\""
             )
         }
     }

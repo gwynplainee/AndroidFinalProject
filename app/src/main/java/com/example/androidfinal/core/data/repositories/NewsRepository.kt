@@ -11,9 +11,8 @@ class NewsRepository(
     private val apiService: ApiService,
     private val newsDao: NewsDao)
 {
-    fun getNewsStream(): Flow<List<NewsArticleEntity>> {
-        return newsDao.getAllArticles()
-    }
+    val newsStream: Flow<List<NewsArticleEntity>> = newsDao.getAllArticles()
+
 
     suspend fun fetchAndCacheNews(query: String, apiKey: String) {
         try{
