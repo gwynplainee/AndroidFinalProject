@@ -6,10 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.navArgs
 import com.example.androidfinal.R
 import com.example.androidfinal.core.ui.viewmodel.DetailViewModel
 
 class DetailFragment : Fragment() {
+    private val args: DetailFragmentArgs by navArgs()
 
     companion object {
         fun newInstance() = DetailFragment()
@@ -28,5 +30,10 @@ class DetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         return inflater.inflate(R.layout.fragment_detail, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val article = args.article
     }
 }

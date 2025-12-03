@@ -8,10 +8,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.androidfinal.R
+import com.example.androidfinal.core.data.db.NewsArticleEntity
 import com.example.androidfinal.core.data.model.NewsArticle
 
 
-class NewsAdapter(private val articles: List<NewsArticle>, private val listener: OnArticleClickListener): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class NewsAdapter(private val articles: List<NewsArticleEntity>, private val listener: OnArticleClickListener): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val VIEW_TYPE_FEATURED = 0
     private val VIEW_TYPE_STANDARD = 1
 
@@ -67,7 +68,7 @@ class NewsAdapter(private val articles: List<NewsArticle>, private val listener:
         val featuredSummary: TextView = itemView.findViewById(R.id.featured_summary)
 
 
-        fun bind(article: NewsArticle){
+        fun bind(article: NewsArticleEntity){
             featuredTitle.text = article.title
             featuredSummary.text = article.description
             if (!article.imageUrl.isNullOrEmpty()) {
@@ -92,7 +93,7 @@ class NewsAdapter(private val articles: List<NewsArticle>, private val listener:
         val standardTitle: TextView = itemView.findViewById(R.id.standard_title)
         val standardMetadata: TextView = itemView.findViewById(R.id.standard_metadata)
 
-        fun bind(article: NewsArticle){
+        fun bind(article: NewsArticleEntity){
             standardTitle.text = article.title
             standardMetadata.text = article.author ?: "Unknown Author"
             if (!article.imageUrl.isNullOrEmpty()) {
