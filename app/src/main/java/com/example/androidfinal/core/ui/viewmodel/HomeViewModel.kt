@@ -2,11 +2,12 @@ package com.example.androidfinal.core.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.androidfinal.BuildConfig
-import com.example.androidfinal.BuildConfig.NEWS_API_KEY
+//import com.example.androidfinal.BuildConfig
+//import com.example.androidfinal.BuildConfig.NEWS_API_KEY
 import com.example.androidfinal.core.data.db.NewsArticleEntity
 import com.example.androidfinal.core.data.repositories.NewsRepository
 import com.example.androidfinal.core.ui.state.HomeUiState
+import com.example.androidfinal.core.utils.Constants.NEWS_API_KEY
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

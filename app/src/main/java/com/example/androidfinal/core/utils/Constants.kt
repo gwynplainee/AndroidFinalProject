@@ -2,7 +2,7 @@ package com.example.androidfinal.core.utils
 
 object Constants {
     const val BASE_URL = "https://newsapi.org/"
-    const val NEWS_API_KEY = "lol_ty_dymal_zdes'_budet_api?"
+    const val NEWS_API_KEY = "f4f7c79a954f44c19032d769f9d22b56"
 
     const val CATEGORY_GENERAL = "general"
     const val CATEGORY_BUSINESS = "business"
