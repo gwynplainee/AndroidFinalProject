@@ -96,6 +96,8 @@ class NewsAdapter(private val articles: List<NewsArticleEntity>, private val lis
         fun bind(article: NewsArticleEntity){
             standardTitle.text = article.title
             standardMetadata.text = article.author ?: "Unknown Author"
+
+            android.util.Log.d("GLIDE_DEBUG", "Title: ${article.title} - Image URL: ${article.imageUrl}")
             if (!article.imageUrl.isNullOrEmpty()) {
                 Glide.with(itemView.context)
                     .load(article.imageUrl)

@@ -13,4 +13,9 @@ interface NewsDao {
 
     @Query("SELECT * FROM news_articles")
     fun getAllArticles(): Flow<List<NewsArticleEntity>>
+
+    @Query("DELETE FROM news_articles")
+    suspend fun deleteAllArticles()
+
+
 }

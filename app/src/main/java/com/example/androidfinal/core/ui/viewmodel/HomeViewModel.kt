@@ -39,9 +39,8 @@ class HomeViewModel(private val repository: NewsRepository) : ViewModel() {
 
     fun refreshNews(category: String){
         viewModelScope.launch(Dispatchers.IO) {
-            if(_uiState.value !is HomeUiState.Success){
                 _uiState.value = HomeUiState.Loading
-            }
+
 
             repository.fetchAndCacheNews(category, NEWS_API_KEY)
         }

@@ -14,9 +14,9 @@ class NewsRepository(
     val newsStream: Flow<List<NewsArticleEntity>> = newsDao.getAllArticles()
 
 
-    suspend fun fetchAndCacheNews(query: String, apiKey: String) {
+    suspend fun fetchAndCacheNews(category: String, apiKey: String) {
         try{
-            val response = ApiClient.apiService.getNewsArticles(query, apiKey)
+            val response = ApiClient.apiService.getNewsArticles(category, apiKey)
 
             if(response.status == "ok"){
                 val entities = response.articles.map { article -> NewsArticleEntity(
@@ -24,13 +24,13 @@ class NewsRepository(
                     source = article.source,
                     title = article.title ?: "No Title",
                     url = article.url,
-                    imageUrl = article.url,
+                    imageUrl = article.imageUrl,
                     description = article.description,
                     content = article.content,
                     publishedAt = article.publishedAt
 
                 ) }
-
+                newsDao.deleteAllArticles()
                 newsDao.insertAll(entities)
             }
         } catch (e: Exception){

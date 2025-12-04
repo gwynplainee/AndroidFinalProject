@@ -16,13 +16,13 @@ class CategoryAdapter(private val categories: List<String>, private val onCatego
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): CategoryAdapter.CategoryViewHolder {
+    ): CategoryViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_category,parent,false)
         return CategoryViewHolder(view)
     }
 
     override fun onBindViewHolder(
-        holder: CategoryAdapter.CategoryViewHolder,
+        holder: CategoryViewHolder,
         position: Int
     ) {
         holder.bind(categories[position],position)

@@ -74,7 +74,6 @@ class HomeFragment : Fragment(), OnArticleClickListener {
         navRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        // Initialize Adapter
         val categoryAdapter = CategoryAdapter(categoryList) { selectedCategory ->
             viewModel.refreshNews(selectedCategory)
         }

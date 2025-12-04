@@ -32,8 +32,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/standard_image"
-        tools:text="A smaller news title that should wrap to 2 or 3 lines for readability."/>
-<!--        android:fontFamily="@font/montserrat_semi_bold"-->
+        tools:text="A smaller news title that should wrap to 2 or 3 lines for readability."
+        android:fontFamily="@font/montserrat_semi_bold"/>
 
 
 
@@ -50,8 +50,8 @@
         app:layout_constraintTop_toBottomOf="@id/standard_title"
         app:layout_constraintStart_toStartOf="@id/standard_title"
         app:layout_constraintEnd_toEndOf="@id/standard_title"
-        tools:text="Source Name | 1 hour ago"/>
-<!--        android:fontFamily="@font/be_vietnam_pro_light"-->
+        tools:text="Source Name | 1 hour ago"
+        android:fontFamily="@font/be_vietnam_pro_light"/>
 
 
     <View
