@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("kotlin-parcelize")
+    id("kotlin-kapt")
     id("androidx.navigation.safeargs.kotlin")
 }
 
@@ -21,6 +22,10 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    buildFeatures{
+        buildConfig = true
+    }
+
     val properties = Properties()
     properties.load(project.rootProject.file("local.properties").inputStream())
 
@@ -36,7 +41,7 @@ android {
             buildConfigField(
                 "String",
                 "NEWS_API_KEY",
-                "\"${properties.getProperty("NEWS_API_KEY")}\"" // Note the escaped quotes
+                "\"${properties.getProperty("NEWS_API_KEY")}\""
             )
         }
     }
@@ -50,7 +55,10 @@ android {
 }
 
 dependencies {
-    implementation("androidx.room:room-gradle-plugin:2.8.4")
+    implementation("androidx.room:room-ktx:2.8.4")
+
+    kapt("androidx.room:room-compiler:2.8.4")
+
     implementation("androidx.room:room-runtime:2.8.4")
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.12.0"))
     implementation("com.squareup.okhttp3:okhttp")

@@ -6,21 +6,57 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.androidfinal.NewsApplication
 import com.example.androidfinal.R
-import com.example.androidfinal.core.ui.viewmodel.HomeViewModel
+import com.example.androidfinal.core.data.db.NewsArticleEntity
+import com.example.androidfinal.core.data.model.NewsArticle
+import com.example.androidfinal.core.ui.adapter.CategoryAdapter
+import com.example.androidfinal.core.ui.adapter.NewsAdapter
+import com.example.androidfinal.core.ui.adapter.OnArticleClickListener
 
-class HomeFragment : Fragment() {
+import com.example.androidfinal.core.ui.state.HomeUiState
+import com.example.androidfinal.core.ui.viewmodel.HomeViewModel
+import com.example.androidfinal.core.ui.viewmodel.HomeViewModelFactory
+import kotlinx.coroutines.launch
+
+class HomeFragment : Fragment(), OnArticleClickListener {
 
     companion object {
         fun newInstance() = HomeFragment()
     }
 
-    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel: HomeViewModel by viewModels {
+        HomeViewModelFactory(
+            (requireActivity().application as NewsApplication).repository
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // TODO: Use the ViewModel
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupCategoryRecycler()
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    handleUiState(state)
+                }
+            }
+        }
     }
 
     override fun onCreateView(
@@ -29,4 +65,57 @@ class HomeFragment : Fragment() {
     ): View {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
+
+    private fun setupCategoryRecycler() {
+        val categoryList = listOf("General", "Business", "Entertainment", "Health", "Science", "Sports", "Technology")
+
+        val navRecyclerView: RecyclerView = view?.findViewById(R.id.nav_recycler_view) ?: return
+
+        navRecyclerView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
+        val categoryAdapter = CategoryAdapter(categoryList) { selectedCategory ->
+            viewModel.refreshNews(selectedCategory)
+        }
+
+        navRecyclerView.adapter = categoryAdapter
+    }
+
+    override fun onArticleClicked(article: NewsArticleEntity) {
+        val action = HomeFragmentDirections.actionHomeFragmentToDetailFragment(article)
+        findNavController().navigate(action)
+    }
+
+    private fun setupRecyclerView(articles: List<NewsArticleEntity>) {
+        val recyclerView: RecyclerView? = view?.findViewById(R.id.news_recycler_view)
+        recyclerView?.layoutManager = LinearLayoutManager(requireContext())
+
+        val adapter = NewsAdapter(articles, this)
+        recyclerView?.adapter = adapter
+    }
+
+    private fun handleUiState(state: HomeUiState) {
+        val recyclerView = view?.findViewById<RecyclerView>(R.id.news_recycler_view)
+        val loadingIndicator = view?.findViewById<ProgressBar>(R.id.loading_indicator)
+        val errorText = view?.findViewById<TextView>(R.id.error_message_text)
+
+        recyclerView?.visibility = View.GONE
+        loadingIndicator?.visibility = View.GONE
+        errorText?.visibility = View.GONE
+
+        when (state) {
+            is HomeUiState.Loading -> {
+                loadingIndicator?.visibility = View.VISIBLE
+            }
+            is HomeUiState.Error -> {
+                errorText?.visibility = View.VISIBLE
+                errorText?.text = state.message
+            }
+            is HomeUiState.Success -> {
+                recyclerView?.visibility = View.VISIBLE
+                setupRecyclerView(state.articles)
+            }
+        }
+    }
+
 }
