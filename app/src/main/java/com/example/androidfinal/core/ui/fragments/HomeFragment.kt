@@ -34,10 +34,10 @@ class HomeFragment : Fragment(), OnArticleClickListener {
     }
 
     private val viewModel: HomeViewModel by viewModels {
-        HomeViewModelFactory(
-            (requireActivity().application as NewsApplication).repository
-        )
+        val app = requireActivity().application as NewsApplication
+        HomeViewModelFactory(app.repository, app.preferencesManager)
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

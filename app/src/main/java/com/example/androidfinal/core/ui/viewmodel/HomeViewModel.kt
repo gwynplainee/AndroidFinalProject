@@ -8,6 +8,7 @@ import com.example.androidfinal.core.data.db.NewsArticleEntity
 import com.example.androidfinal.core.data.repositories.NewsRepository
 import com.example.androidfinal.core.ui.state.HomeUiState
 import com.example.androidfinal.core.utils.Constants.NEWS_API_KEY
+import com.example.androidfinal.core.utils.PreferencesManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,9 +18,10 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import okhttp3.Dispatcher
 
-class HomeViewModel(private val repository: NewsRepository) : ViewModel() {
+class HomeViewModel(private val repository: NewsRepository, private val preferencesManager: PreferencesManager) : ViewModel() {
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+    private var currentCategory = "general"
 
     init {
         viewModelScope.launch {
@@ -38,14 +40,19 @@ class HomeViewModel(private val repository: NewsRepository) : ViewModel() {
         refreshNews("general")
     }
 
+
     fun refreshNews(category: String){
+        currentCategory = category
+        val country = preferencesManager.getCountry()
+
         viewModelScope.launch(Dispatchers.IO) {
                 _uiState.value = HomeUiState.Loading
 
-
-            repository.fetchAndCacheNews(category, NEWS_API_KEY)
+            repository.fetchAndCacheNews(country, category, NEWS_API_KEY)
         }
     }
 
-
+    fun refreshNewsForCountry() {
+        refreshNews(currentCategory)
+    }
 }

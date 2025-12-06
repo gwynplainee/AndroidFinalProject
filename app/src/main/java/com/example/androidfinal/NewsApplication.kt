@@ -4,6 +4,7 @@ import android.app.Application
 import com.example.androidfinal.core.data.api.ApiClient
 import com.example.androidfinal.core.data.db.NewsDatabase
 import com.example.androidfinal.core.data.repositories.NewsRepository
+import com.example.androidfinal.core.utils.PreferencesManager
 
 class NewsApplication: Application() {
     val database by lazy { NewsDatabase.getDatabase(this) }
@@ -14,4 +15,6 @@ class NewsApplication: Application() {
             newsDao = database.newsDao()
         )
     }
+    val preferencesManager by lazy { PreferencesManager(this) }
+
 }
