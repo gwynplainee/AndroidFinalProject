@@ -38,13 +38,6 @@ class HomeFragment : Fragment(), OnArticleClickListener {
         HomeViewModelFactory(app.repository, app.preferencesManager)
     }
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // TODO: Use the ViewModel
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -54,6 +47,14 @@ class HomeFragment : Fragment(), OnArticleClickListener {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
                     handleUiState(state)
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.scrollToTopEvent.collect {
+                    view.findViewById<RecyclerView>(R.id.news_recycler_view)?.scrollToPosition(0)
                 }
             }
         }
@@ -116,6 +117,10 @@ class HomeFragment : Fragment(), OnArticleClickListener {
                 setupRecyclerView(state.articles)
             }
         }
+    }
+
+    fun requestScrollToTop(){
+        viewModel.requestScrollToTop()
     }
 
 }

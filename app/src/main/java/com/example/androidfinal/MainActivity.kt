@@ -11,8 +11,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.example.androidfinal.core.ui.fragments.HomeFragment
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController: NavController
     private lateinit var bottomNavContainer: View
 
@@ -33,7 +35,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val navHostFragment = supportFragmentManager
+        navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
         bottomNavContainer = findViewById(R.id.bottom_nav_container)
@@ -45,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         txtMore = findViewById(R.id.txt_more)
 
         navHome.setOnClickListener {
-            navController.navigate(R.id.homeFragment)
+            handleHomeNavigation()
         }
 
         navMore.setOnClickListener {
@@ -85,6 +87,26 @@ class MainActivity : AppCompatActivity() {
 
             imgMore.setColorFilter(activeColor)
             txtMore.setTextColor(activeColor)
+        }
+    }
+
+    private fun handleHomeNavigation(){
+        val currentDestination = navController.currentDestination?.id
+
+        if(currentDestination == R.id.homeFragment){
+            val currentFragment = navHostFragment.childFragmentManager.fragments.firstOrNull()
+            (currentFragment as? HomeFragment)?.requestScrollToTop()
+        }else{
+            navController.navigate(
+                R.id.homeFragment,
+                null,
+                androidx.navigation.navOptions {
+                    popUpTo(R.id.homeFragment){
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                }
+                )
         }
     }
 }

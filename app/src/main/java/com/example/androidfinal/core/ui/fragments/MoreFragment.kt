@@ -48,7 +48,6 @@ class MoreFragment : Fragment() {
 
         val countryData = listOf(
             "United States" to "us",
-            "Kazakhstan" to "kz",
             "Canada" to "ca",
             "Australia" to "au",
             "India" to "in",

@@ -10,8 +10,11 @@ import com.example.androidfinal.core.ui.state.HomeUiState
 import com.example.androidfinal.core.utils.Constants.NEWS_API_KEY
 import com.example.androidfinal.core.utils.PreferencesManager
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -21,6 +24,9 @@ import okhttp3.Dispatcher
 class HomeViewModel(private val repository: NewsRepository, private val preferencesManager: PreferencesManager) : ViewModel() {
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+    private val _scrollToTopEvent = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    val scrollToTopEvent: SharedFlow<Unit> = _scrollToTopEvent.asSharedFlow()
+
     private var currentCategory = "general"
 
     init {
@@ -55,4 +61,13 @@ class HomeViewModel(private val repository: NewsRepository, private val preferen
     fun refreshNewsForCountry() {
         refreshNews(currentCategory)
     }
+
+    fun requestScrollToTop(){
+        viewModelScope.launch {
+            _scrollToTopEvent.emit(Unit)
+        }
+
+    }
+
+
 }
