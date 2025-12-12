@@ -91,22 +91,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleHomeNavigation(){
-        val currentDestination = navController.currentDestination?.id
-
-        if(currentDestination == R.id.homeFragment){
+        if (navController.currentDestination?.id == R.id.homeFragment) {
             val currentFragment = navHostFragment.childFragmentManager.fragments.firstOrNull()
             (currentFragment as? HomeFragment)?.requestScrollToTop()
-        }else{
+        } else {
             navController.navigate(
                 R.id.homeFragment,
                 null,
                 androidx.navigation.navOptions {
-                    popUpTo(R.id.homeFragment){
+                    popUpTo(R.id.homeFragment) {
                         inclusive = true
                     }
                     launchSingleTop = true
                 }
-                )
+            )
         }
     }
 }
