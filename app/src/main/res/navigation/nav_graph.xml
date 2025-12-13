@@ -29,6 +29,9 @@
         <action
             android:id="@+id/action_moreFragment_to_bookmarksFragment"
             app:destination="@id/bookmarksFragment" />
+        <action
+            android:id="@+id/action_moreFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
 
     <fragment
@@ -40,4 +43,8 @@
             app:destination="@id/detailFragment" />
     </fragment>
 
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.androidfinal.core.ui.fragments.SearchFragment"
+        android:label="SearchFragment" />
 </navigation>

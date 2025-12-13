@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import com.example.androidfinal.core.data.api.ApiClient
 import com.example.androidfinal.core.data.db.SavedArticleEntity
 import com.example.androidfinal.core.data.db.SavedArticlesDao
+import com.example.androidfinal.core.data.model.NewsArticle
 
 class NewsRepository(
     private val apiService: ApiService,
@@ -69,6 +70,22 @@ class NewsRepository(
 
     suspend fun deleteArticle(article: SavedArticleEntity){
         savedArticlesDao.deleteArticle(article)
+    }
+
+    suspend fun searchNews(query: String, apiKey: String): List<NewsArticle> {
+        return try {
+            val resp = apiService.searchNews(query, apiKey = apiKey)
+
+            if (resp.status == "ok") {
+                resp.articles
+            } else {
+                Log.w("NewsRepository", "Search failed: ${resp.status}")
+                emptyList()
+            }
+        } catch (e: Exception) {
+            Log.e("NewsRepository", "Search error: ${e.message}")
+            emptyList()
+        }
     }
 
 
