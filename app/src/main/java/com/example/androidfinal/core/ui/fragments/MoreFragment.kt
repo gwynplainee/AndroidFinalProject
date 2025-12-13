@@ -40,6 +40,7 @@ class MoreFragment : Fragment() {
 
         setupCountrySpinner(view)
         setupBookmarksNavigation(view)
+        setupSearchNavigation(view)
     }
 
     private fun setupCountrySpinner(view: View) {
@@ -103,6 +104,12 @@ class MoreFragment : Fragment() {
         val bookmarksCard: CardView = view.findViewById(R.id.bookmarks_card)
         bookmarksCard.setOnClickListener {
             findNavController().navigate(R.id.action_moreFragment_to_bookmarksFragment)
+        }
+    }
+    private fun setupSearchNavigation(view: View) {
+        val searchCard: CardView = view.findViewById(R.id.search_card)
+        searchCard.setOnClickListener {
+            findNavController().navigate(R.id.action_moreFragment_to_searchFragment)
         }
     }
 }
