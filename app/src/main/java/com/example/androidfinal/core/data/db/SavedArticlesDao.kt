@@ -12,13 +12,16 @@ interface SavedArticlesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertArticle(article: SavedArticleEntity)
 
-    @Delete
-    suspend fun deleteArticle(article: SavedArticleEntity)
-
     @Query("SELECT EXISTS(SELECT 1 FROM saved_articles WHERE url = :url)")
-    suspend fun isArticleSaved(url: String): Boolean
+    suspend fun isArticleSaved(url: String?): Boolean
 
     @Query("SELECT * FROM saved_articles ORDER BY id DESC")
     fun getAllSavedArticles(): Flow<List<SavedArticleEntity>>
+
+    @Query("DELETE FROM saved_articles WHERE url = :url")
+    suspend fun deleteArticleByUrl(url: String?)
+
+    @Delete
+    suspend fun deleteArticle(article: SavedArticleEntity)
 
 }

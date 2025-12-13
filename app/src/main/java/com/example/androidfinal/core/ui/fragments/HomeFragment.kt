@@ -29,9 +29,6 @@ import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment(), OnArticleClickListener {
 
-    companion object {
-        fun newInstance() = HomeFragment()
-    }
 
     private val viewModel: HomeViewModel by viewModels {
         val app = requireActivity().application as NewsApplication

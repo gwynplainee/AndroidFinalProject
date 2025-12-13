@@ -12,7 +12,8 @@ class NewsApplication: Application() {
     val repository by lazy {
         NewsRepository(
             apiService = ApiClient.apiService,
-            newsDao = database.newsDao()
+            newsDao = database.newsDao(),
+            savedArticlesDao = database.savedArticlesDao()
         )
     }
     val preferencesManager by lazy { PreferencesManager(this) }

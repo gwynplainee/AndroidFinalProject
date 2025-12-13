@@ -49,13 +49,26 @@ class NewsRepository(
             description = articleEntity.description,
             content = articleEntity.content,
             imageUrl = articleEntity.imageUrl,
-            publishedAt = articleEntity.publishedAt
+            publishedAt = articleEntity.publishedAt,
+            source = articleEntity.source
         )
         savedArticlesDao.insertArticle(savedEntity)
     }
 
-    suspend fun deleteArticle(articleEntity: SavedArticleEntity){
-        savedArticlesDao.deleteArticle(articleEntity)
+    suspend fun reSaveArticle(article: SavedArticleEntity) {
+        savedArticlesDao.insertArticle(article)
+    }
+
+    suspend fun deleteArticleByUrl(url: String?){
+        savedArticlesDao.deleteArticleByUrl(url)
+    }
+
+    suspend fun isArticleSaved(url: String?): Boolean {
+        return savedArticlesDao.isArticleSaved(url)
+    }
+
+    suspend fun deleteArticle(article: SavedArticleEntity){
+        savedArticlesDao.deleteArticle(article)
     }
 
 

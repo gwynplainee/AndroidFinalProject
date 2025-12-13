@@ -60,6 +60,10 @@ class SavedNewsAdapter(private val articles: List<SavedArticleEntity>, private v
         }
     }
 
+    fun getArticleAt(position: Int): SavedArticleEntity{
+        return articles[position]
+    }
+
     inner class FeaturedViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val featuredImage: ImageView = itemView.findViewById(R.id.featured_image)
         val featuredTitle: TextView = itemView.findViewById(R.id.featured_title)

@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-@Database(entities = [NewsArticleEntity::class, SavedArticleEntity::class], version = 1, exportSchema = false)
+@Database(entities = [NewsArticleEntity::class, SavedArticleEntity::class], version = 2, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class NewsDatabase : RoomDatabase() {
     abstract fun newsDao() : NewsDao
@@ -23,7 +23,9 @@ abstract class NewsDatabase : RoomDatabase() {
                     context.applicationContext,
                     NewsDatabase::class.java,
                     "news_database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration(true)
+                    .build()
                 INSTANCE = instance
                 instance
             }

@@ -5,4 +5,7 @@
     <color name="divider_color">#DCDCDC</color>
     <color name="active_nav">#000000</color>
     <color name="inactive_nav">#A9A9A9</color>
+    <color name="green_500">#4CAF50</color>
+    <color name="red_500">#F44336</color>
+    <color name="yellow">#FFEB3B</color>
 </resources>
