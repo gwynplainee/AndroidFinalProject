@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.androidfinal.NewsApplication
 import com.example.androidfinal.R
 import com.example.androidfinal.core.data.db.NewsArticleEntity
-import com.example.androidfinal.core.data.model.NewsArticle
+import com.example.androidfinal.core.data.db.SavedArticleEntity
 import com.example.androidfinal.core.ui.adapter.CategoryAdapter
 import com.example.androidfinal.core.ui.adapter.NewsAdapter
 import com.example.androidfinal.core.ui.adapter.OnArticleClickListener

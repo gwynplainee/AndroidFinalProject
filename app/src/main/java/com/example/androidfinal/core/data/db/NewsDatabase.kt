@@ -6,10 +6,11 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-@Database(entities = [NewsArticleEntity::class], version = 1, exportSchema = false)
+@Database(entities = [NewsArticleEntity::class, SavedArticleEntity::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class NewsDatabase : RoomDatabase() {
     abstract fun newsDao() : NewsDao
+    abstract fun savedArticlesDao() : SavedArticlesDao
 
 
     companion object{

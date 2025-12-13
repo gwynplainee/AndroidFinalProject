@@ -16,13 +16,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.androidfinal.NewsApplication
 import com.example.androidfinal.R
 import com.example.androidfinal.core.data.db.NewsArticleEntity
-import com.example.androidfinal.core.ui.adapter.NewsAdapter
+import com.example.androidfinal.core.data.db.SavedArticleEntity
 import com.example.androidfinal.core.ui.adapter.OnArticleClickListener
+import com.example.androidfinal.core.ui.adapter.OnSavedArticleClickListener
+import com.example.androidfinal.core.ui.adapter.SavedNewsAdapter
 import com.example.androidfinal.core.ui.viewmodel.BookmarksViewModel
 import com.example.androidfinal.core.ui.viewmodel.BookmarksViewModelFactory
 import kotlinx.coroutines.launch
 
-class BookmarksFragment : Fragment(), OnArticleClickListener {
+class BookmarksFragment : Fragment(), OnSavedArticleClickListener {
 
     private val viewModel: BookmarksViewModel by viewModels {
         BookmarksViewModelFactory(
@@ -55,14 +57,14 @@ class BookmarksFragment : Fragment(), OnArticleClickListener {
                     } else {
                         recyclerView.visibility = View.VISIBLE
                         emptyText.visibility = View.GONE
-                        recyclerView.adapter = NewsAdapter(articles, this@BookmarksFragment)
+                        recyclerView.adapter = SavedNewsAdapter(articles, this@BookmarksFragment)
                     }
                 }
             }
         }
     }
 
-    override fun onArticleClicked(article: NewsArticleEntity) {
+    override fun onArticleClicked(article: SavedArticleEntity) {
         val action = BookmarksFragmentDirections.actionBookmarksFragmentToDetailFragment(article)
         findNavController().navigate(action)
     }

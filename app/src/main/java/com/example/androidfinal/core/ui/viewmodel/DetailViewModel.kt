@@ -3,12 +3,13 @@ package com.example.androidfinal.core.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.androidfinal.core.data.db.NewsArticleEntity
+import com.example.androidfinal.core.data.repositories.NewsRepository
 import com.example.androidfinal.core.ui.state.DetailUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class DetailViewModel(article: NewsArticleEntity) : ViewModel() {
+class DetailViewModel(private val repository: NewsRepository,article: NewsArticleEntity) : ViewModel() {
     private val _uiState = MutableStateFlow(DetailUiState(article))
     val uiState: StateFlow<DetailUiState> = _uiState
 
@@ -29,6 +30,13 @@ class DetailViewModel(article: NewsArticleEntity) : ViewModel() {
                 formattedMetadata = "${article.author ?: "Source"} | ${article.publishedAt}",
                 formattedBody = bodyText
             )
+        }
+    }
+
+    fun saveCurrentArticle(){
+        viewModelScope.launch {
+            repository.saveArticle(_uiState.value.article)
+
         }
     }
 }

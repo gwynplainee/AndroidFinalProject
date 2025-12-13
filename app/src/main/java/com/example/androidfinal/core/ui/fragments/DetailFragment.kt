@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.text.HtmlCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -56,6 +57,12 @@ class DetailFragment : Fragment() {
                             .into(imageView)
                     } else {
                         imageView.setImageResource(R.drawable.news_placeholder)
+                    }
+
+                    val saveButton: ImageView = view.findViewById(R.id.fab_save)
+                    saveButton.setOnClickListener {
+                        viewModel.saveCurrentArticle()
+                        Toast.makeText(context, "Article saved", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
