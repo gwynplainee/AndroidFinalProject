@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.androidfinal.NewsApplication
 import com.example.androidfinal.R
 import com.example.androidfinal.core.data.model.NewsArticle
+import com.example.androidfinal.core.data.repositories.NewsMapper.toEntity
 import com.example.androidfinal.core.ui.adapter.SearchAdapter
 import com.example.androidfinal.core.ui.state.SearchUiState
 import com.example.androidfinal.core.ui.viewmodel.SearchViewModel
@@ -126,6 +127,9 @@ class SearchFragment : Fragment() {
     }
     private fun displayResults(articles: List<NewsArticle>) {
         val adapter = SearchAdapter(articles) { article ->
+            val x = article.toEntity()
+            val action = SearchFragmentDirections.actionSearchFragmentToDetailFragment(x)
+            findNavController().navigate(action)
         }
         recyclerView.adapter = adapter
     }
