@@ -35,6 +35,8 @@ class HomeFragment : Fragment(), OnArticleClickListener {
         HomeViewModelFactory(app.repository, app.preferencesManager)
     }
 
+    private lateinit var categoryAdapter: CategoryAdapter
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -64,6 +66,20 @@ class HomeFragment : Fragment(), OnArticleClickListener {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
+    override fun onResume() {
+        super.onResume()
+        val app = requireActivity().application as NewsApplication
+        val isSourceActive = !app.preferencesManager.getSource().isNullOrEmpty()
+
+        if (::categoryAdapter.isInitialized) {
+            categoryAdapter.updateSourceState(isSourceActive)
+        }
+        if (app.preferencesManager.hasPreferencesChanged()) {
+            viewModel.refreshNewsFromNetworkIfNeeded()
+            app.preferencesManager.setPreferencesChanged(false)
+        }
+    }
+
     private fun setupCategoryRecycler() {
         val categoryList = listOf("General", "Business", "Entertainment", "Health", "Science", "Sports", "Technology")
 
@@ -72,12 +88,22 @@ class HomeFragment : Fragment(), OnArticleClickListener {
         navRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        val categoryAdapter = CategoryAdapter(categoryList) { selectedCategory ->
+        val app = requireActivity().application as NewsApplication
+
+
+        val currentSavedCategory = app.preferencesManager.getCategory()
+        val currentSource = app.preferencesManager.getSource()
+
+        val isSourceActive = !currentSource.isNullOrEmpty()
+
+        categoryAdapter = CategoryAdapter(categoryList, currentSavedCategory, isSourceActive) { selectedCategory ->
             viewModel.refreshNews(selectedCategory)
         }
 
         navRecyclerView.adapter = categoryAdapter
     }
+
+
 
     override fun onArticleClicked(article: NewsArticleEntity) {
         val action = HomeFragmentDirections.actionHomeFragmentToDetailFragment(article)

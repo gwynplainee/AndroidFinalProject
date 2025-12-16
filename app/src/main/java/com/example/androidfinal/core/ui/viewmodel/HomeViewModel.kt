@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 //import com.example.androidfinal.BuildConfig
 //import com.example.androidfinal.BuildConfig.NEWS_API_KEY
-import com.example.androidfinal.core.data.db.NewsArticleEntity
 import com.example.androidfinal.core.data.repositories.NewsRepository
 import com.example.androidfinal.core.ui.state.HomeUiState
 import com.example.androidfinal.core.utils.Constants.NEWS_API_KEY
@@ -16,18 +15,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
 
 @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 class HomeViewModel(private val repository: NewsRepository, private val preferencesManager: PreferencesManager) : ViewModel() {
-    private val _currentCategory = MutableStateFlow("general")
+    private val _currentCategory = MutableStateFlow(preferencesManager.getCategory())
     val uiState: StateFlow<HomeUiState> = _currentCategory.flatMapLatest { category -> repository.newsStream.map { articleEntities ->
         if(articleEntities.isEmpty()){
             HomeUiState.Loading
@@ -44,8 +41,10 @@ class HomeViewModel(private val repository: NewsRepository, private val preferen
 
 
     fun refreshNews(category: String){
-        if(_currentCategory.value != category){
-            _currentCategory.value = category
+        val lowerCategory = category.lowercase()
+        if(_currentCategory.value != lowerCategory){
+            preferencesManager.savecategory(lowerCategory)
+            _currentCategory.value = lowerCategory
         }else{
             refreshNewsFromNetwork(category)
         }
@@ -53,13 +52,17 @@ class HomeViewModel(private val repository: NewsRepository, private val preferen
     }
 
     fun refreshNewsFromNetwork(category: String){
-        val country = preferencesManager.getCountry()
+        val source = preferencesManager.getSource()
+        val apiCategory = if (!source.isNullOrEmpty()) null else category
         viewModelScope.launch (Dispatchers.IO){
-            repository.fetchAndCacheNews(country,category,NEWS_API_KEY)
+            repository.fetchAndCacheNews(source,apiCategory,NEWS_API_KEY)
         }
     }
 
-    fun refreshNewsForCountry() {
+    fun refreshNewsFromNetworkIfNeeded() {
+        refreshNewsFromNetwork(_currentCategory.value)
+    }
+    fun refreshNewsForSource() {
         refreshNews(_currentCategory.value)
     }
 

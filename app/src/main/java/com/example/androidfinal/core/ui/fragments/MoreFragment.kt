@@ -38,60 +38,56 @@ class MoreFragment : Fragment() {
             HomeViewModelFactory(app.repository, app.preferencesManager)
         )[HomeViewModel::class.java]
 
-        setupCountrySpinner(view)
+        setupSourceSpinner(view)
         setupBookmarksNavigation(view)
         setupSearchNavigation(view)
     }
 
-    private fun setupCountrySpinner(view: View) {
-        val countrySpinner: Spinner = view.findViewById(R.id.country_spinner)
+    private fun setupSourceSpinner(view: View) {
+        val sourceSpinner: Spinner = view.findViewById(R.id.country_spinner)
         val app = requireActivity().application as NewsApplication
 
-        val countryData = listOf(
-            "United States" to "us",
-            "Canada" to "ca",
-            "Australia" to "au",
-            "India" to "in",
-            "Germany" to "de",
-            "France" to "fr",
-            "Japan" to "jp",
-            "South Korea" to "kr",
-            "Russia" to "ru",
-            "China" to "cn",
-            "Brazil" to "br",
-            "Mexico" to "mx",
-            "Italy" to "it",
-            "Spain" to "es"
+        val sourceData = listOf(
+            "All sources" to null,
+            "BBC News" to "bbc-news",
+            "ABC News" to "abc-news",
+            "ESPN" to "espn",
+            "Bloomberg" to "bloomberg",
+            "Fox News" to "fox-news",
+            "IGN" to "ign",
+            "TechCrunch" to "techcrunch",
+            "The Verge" to "the-verge"
         )
 
-        val countryNames = countryData.map { it.first }
-        val countryCodes = countryData.map { it.second }
+        val sourceNames = sourceData.map { it.first }
+        val sourceCodes = sourceData.map { it.second }
 
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, countryNames)
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, sourceNames)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        countrySpinner.adapter = adapter
+        sourceSpinner.adapter = adapter
 
-        val currentCountry = app.preferencesManager.getCountry()
-        val currentIndex = countryCodes.indexOf(currentCountry)
+        val currentSource = app.preferencesManager.getSource()
+        val currentIndex = sourceCodes.indexOf(currentSource)
         if (currentIndex != -1) {
-            countrySpinner.setSelection(currentIndex)
+            sourceSpinner.setSelection(currentIndex)
         }
 
-        countrySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        sourceSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedCountryCode = countryCodes[position]
-                val previousCountry = app.preferencesManager.getCountry()
+                val selectedSourceCode = sourceCodes[position]
+                val previousSource = app.preferencesManager.getSource()
 
-                if (selectedCountryCode != previousCountry) {
-                    app.preferencesManager.saveCountry(selectedCountryCode)
+                if (selectedSourceCode != previousSource) {
+                    app.preferencesManager.saveSource(selectedSourceCode)
+                    app.preferencesManager.setPreferencesChanged(true)
 
                     Toast.makeText(
                         requireContext(),
-                        "News source changed to: ${countryNames[position]}",
+                        "News source changed to: ${sourceNames[position]}",
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    homeViewModel.refreshNewsForCountry()
+                    homeViewModel.refreshNewsForSource()
                 }
             }
 

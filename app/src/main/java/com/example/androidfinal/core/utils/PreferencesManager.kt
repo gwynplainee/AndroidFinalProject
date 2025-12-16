@@ -8,15 +8,33 @@ class PreferencesManager(context: Context) {
         context.getSharedPreferences("news_prefs", Context.MODE_PRIVATE)
 
     companion object {
-        private const val KEY_COUNTRY = "selected_country"
-        private const val DEFAULT_COUNTRY = "us"
+        private const val KEY_SOURCE = "selected_source"
+
+        private const val KEY_CATEGORY = "selected_category"
+        private const val DEFAULT_CATEGORY = "general"
     }
 
-    fun saveCountry(countryCode: String) {
-        prefs.edit().putString(KEY_COUNTRY, countryCode).apply()
+    fun saveSource(sourceCode: String?) {
+        prefs.edit().putString(KEY_SOURCE, sourceCode).apply()
     }
 
-    fun getCountry(): String {
-        return prefs.getString(KEY_COUNTRY, DEFAULT_COUNTRY) ?: DEFAULT_COUNTRY
+    fun getSource(): String? {
+        return prefs.getString(KEY_SOURCE, null)
+    }
+
+    fun savecategory(category: String){
+        prefs.edit().putString(KEY_CATEGORY, category.lowercase()).apply()
+    }
+
+    fun getCategory(): String{
+        return prefs.getString(KEY_CATEGORY, DEFAULT_CATEGORY)?: DEFAULT_CATEGORY
+    }
+
+    fun setPreferencesChanged(changed: Boolean) {
+        prefs.edit().putBoolean("prefs_changed", changed).apply()
+    }
+
+    fun hasPreferencesChanged(): Boolean {
+        return prefs.getBoolean("prefs_changed", false)
     }
 }

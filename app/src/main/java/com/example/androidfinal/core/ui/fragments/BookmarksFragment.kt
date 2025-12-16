@@ -101,7 +101,7 @@ class BookmarksFragment : Fragment(), OnSavedArticleClickListener {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.bindingAdapterPosition
                 val adapter = recyclerView.adapter as SavedNewsAdapter
-                if(adapter != null && position != RecyclerView.NO_POSITION){
+                if(position != RecyclerView.NO_POSITION){
                     val articleToDelete = adapter.getArticleAt(position)
                     viewModel.deleteArticle(articleToDelete)
 

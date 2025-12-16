@@ -18,9 +18,18 @@ class NewsRepository(
     val newsStream: Flow<List<NewsArticleEntity>> = newsDao.getAllArticles()
     val savedNewsStream: Flow<List<SavedArticleEntity>> = savedArticlesDao.getAllSavedArticles()
 
-    suspend fun fetchAndCacheNews(country: String, category: String, apiKey: String) {
+    suspend fun fetchAndCacheNews(source: String?, category: String?, apiKey: String) {
         try{
-            val response = ApiClient.apiService.getNewsArticles(country, category, apiKey)
+            val apiCategory = if (!source.isNullOrEmpty()) null else category
+            val apiSource = source?.ifEmpty { null }
+
+            Log.d("NewsRepository", "Fetching -> Source: $apiSource, Category: $apiCategory")
+            val response = apiService.getNewsArticles(
+                source = apiSource,
+                category = apiCategory,
+                apiKey = apiKey
+            )
+                //ApiClient.apiService.getNewsArticles(source, category = if (source == null) category else null, apiKey)
 
             if(response.status == "ok"){
                 val entities = response.articles.map { article -> NewsArticleEntity(
