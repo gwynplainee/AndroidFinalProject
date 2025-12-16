@@ -6,14 +6,17 @@ import com.example.androidfinal.core.data.db.NewsArticleEntity
 import com.example.androidfinal.core.data.db.NewsDao
 import kotlinx.coroutines.flow.Flow
 import com.example.androidfinal.core.data.api.ApiClient
+import com.example.androidfinal.core.data.db.SavedArticleEntity
+import com.example.androidfinal.core.data.db.SavedArticlesDao
 import com.example.androidfinal.core.data.model.NewsArticle
 
 class NewsRepository(
     private val apiService: ApiService,
-    private val newsDao: NewsDao)
+    private val newsDao: NewsDao,
+    private val savedArticlesDao: SavedArticlesDao)
 {
     val newsStream: Flow<List<NewsArticleEntity>> = newsDao.getAllArticles()
-
+    val savedNewsStream: Flow<List<SavedArticleEntity>> = savedArticlesDao.getAllSavedArticles()
 
     suspend fun fetchAndCacheNews(country: String, category: String, apiKey: String) {
         try{
@@ -39,6 +42,36 @@ class NewsRepository(
         }
     }
 
+    suspend fun saveArticle(articleEntity: NewsArticleEntity){
+        val savedEntity = SavedArticleEntity(
+            url = articleEntity.url,
+            title = articleEntity.title,
+            author = articleEntity.author,
+            description = articleEntity.description,
+            content = articleEntity.content,
+            imageUrl = articleEntity.imageUrl,
+            publishedAt = articleEntity.publishedAt,
+            source = articleEntity.source
+        )
+        savedArticlesDao.insertArticle(savedEntity)
+    }
+
+    suspend fun reSaveArticle(article: SavedArticleEntity) {
+        savedArticlesDao.insertArticle(article)
+    }
+
+    suspend fun deleteArticleByUrl(url: String?){
+        savedArticlesDao.deleteArticleByUrl(url)
+    }
+
+    suspend fun isArticleSaved(url: String?): Boolean {
+        return savedArticlesDao.isArticleSaved(url)
+    }
+
+    suspend fun deleteArticle(article: SavedArticleEntity){
+        savedArticlesDao.deleteArticle(article)
+    }
+
     suspend fun searchNews(query: String, apiKey: String): List<NewsArticle> {
         return try {
             val resp = apiService.searchNews(query, apiKey = apiKey)
@@ -54,5 +87,7 @@ class NewsRepository(
             emptyList()
         }
     }
+
+
 
 }

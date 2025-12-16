@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.androidfinal.R
 import com.example.androidfinal.core.data.db.NewsArticleEntity
-import com.example.androidfinal.core.data.model.NewsArticle
 
 
 class NewsAdapter(private val articles: List<NewsArticleEntity>, private val listener: OnArticleClickListener): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
