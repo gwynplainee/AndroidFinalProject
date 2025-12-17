@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.androidfinal.NewsApplication
 import com.example.androidfinal.R
 import com.example.androidfinal.core.data.db.SavedArticleEntity
+import com.example.androidfinal.core.data.repositories.NewsMapper.toNewsEntity
 import com.example.androidfinal.core.ui.adapter.OnSavedArticleClickListener
 import com.example.androidfinal.core.ui.adapter.SavedNewsAdapter
 import com.example.androidfinal.core.ui.viewmodel.BookmarksViewModel
@@ -70,17 +71,7 @@ class BookmarksFragment : Fragment(), OnSavedArticleClickListener {
     }
 
     override fun onArticleClicked(article: SavedArticleEntity) {
-        val newsArticle = com.example.androidfinal.core.data.db.NewsArticleEntity(
-            id = 0,
-            source = article.source,
-            author = article.author,
-            title = article.title,
-            description = article.description,
-            url = article.url,
-            imageUrl = article.imageUrl,
-            publishedAt = article.publishedAt,
-            content = article.content,
-        )
+        val newsArticle = article.toNewsEntity()
         val action = BookmarksFragmentDirections.actionBookmarksFragmentToDetailFragment(newsArticle)
         findNavController().navigate(action)
     }

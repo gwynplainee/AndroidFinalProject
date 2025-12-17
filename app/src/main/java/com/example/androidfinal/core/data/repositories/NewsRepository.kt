@@ -9,6 +9,8 @@ import com.example.androidfinal.core.data.api.ApiClient
 import com.example.androidfinal.core.data.db.SavedArticleEntity
 import com.example.androidfinal.core.data.db.SavedArticlesDao
 import com.example.androidfinal.core.data.model.NewsArticle
+import com.example.androidfinal.core.data.repositories.NewsMapper.toEntity
+import com.example.androidfinal.core.data.repositories.NewsMapper.toSavedEntity
 
 class NewsRepository(
     private val apiService: ApiService,
@@ -32,17 +34,7 @@ class NewsRepository(
                 //ApiClient.apiService.getNewsArticles(source, category = if (source == null) category else null, apiKey)
 
             if(response.status == "ok"){
-                val entities = response.articles.map { article -> NewsArticleEntity(
-                    author = article.author,
-                    source = article.source,
-                    title = article.title ?: "No Title",
-                    url = article.url,
-                    imageUrl = article.imageUrl,
-                    description = article.description,
-                    content = article.content,
-                    publishedAt = article.publishedAt
-
-                ) }
+                val entities = response.articles.map { it.toEntity() }
                 newsDao.deleteAllArticles()
                 newsDao.insertAll(entities)
             }
@@ -52,16 +44,7 @@ class NewsRepository(
     }
 
     suspend fun saveArticle(articleEntity: NewsArticleEntity){
-        val savedEntity = SavedArticleEntity(
-            url = articleEntity.url,
-            title = articleEntity.title,
-            author = articleEntity.author,
-            description = articleEntity.description,
-            content = articleEntity.content,
-            imageUrl = articleEntity.imageUrl,
-            publishedAt = articleEntity.publishedAt,
-            source = articleEntity.source
-        )
+        val savedEntity = articleEntity.toSavedEntity()
         savedArticlesDao.insertArticle(savedEntity)
     }
 
