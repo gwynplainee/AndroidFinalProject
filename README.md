@@ -39,7 +39,7 @@ The UI observes data from ViewModels, which request it from the repository. The 
 ### Requirements
 - Android Studio (latest stable)
 - JDK 17
-- Android SDK (min API [XX], target API [XX])
+- Android SDK (min API 24, target API 36)
 - A free API key from [NewsAPI.org / your provider]
 
 ### Build and run
@@ -61,10 +61,10 @@ This project supports **SDG 16: Peace, Justice and Strong Institutions** (target
 Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) and our [Code of Conduct](CODE_OF_CONDUCT.md) first.
 
 ## License
-Released under the [Apache License 2.0 / MIT License](LICENSE).
+Released under the [Apache License 2.0](LICENSE).
 
 ## Ownership
-Developed and maintained by **[Team Name]**: [member names], students at [KBTU], [course name], 2026.
+Developed and maintained by gwynplaine and Aibek, students at [KBTU].
 
 ## Privacy and data
 - The app requires no account and collects no personal data.
